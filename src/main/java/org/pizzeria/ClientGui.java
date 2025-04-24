@@ -202,6 +202,20 @@ public class ClientGui extends Application {
         Label statusLabel = new Label(client.orderStatus);
         statusLabel.setStyle("-fx-font-size: 18px;");
 
+        // Display current ordered items
+        StringBuilder orderedItemsText = new StringBuilder("Current ordered items:\n");
+        List<OrderPizza> orderedItems = client.activeOrderPizzas;
+        for (int i = 0; i < orderedItems.size(); i++) {
+            OrderPizza item = orderedItems.get(i);
+            orderedItemsText.append(i + 1).append(". ").append(item.getName()).append(", ").append(item.getQty()).append("\n");
+        }
+
+        TextArea orderedItemsArea = new TextArea(orderedItemsText.toString());
+        orderedItemsArea.setEditable(false);
+        orderedItemsArea.setWrapText(true);
+        orderedItemsArea.setStyle("-fx-font-size: 14px;");
+        orderedItemsArea.setMaxHeight(100);
+
         Button backButton = new Button("Back");
         backButton.setStyle("-fx-font-size: 14px;");
         backButton.setOnAction(e -> showHomeScreen());
@@ -225,7 +239,7 @@ public class ClientGui extends Application {
         });
 
         VBox layout = new VBox(20);
-        layout.getChildren().addAll(statusLabel, backButton, refreshButton);
+        layout.getChildren().addAll(statusLabel, orderedItemsArea, backButton, refreshButton);
         if (client.orderDelivered) {
             layout.getChildren().add(confirmButton);
         } else if (client.orderCancelled) {

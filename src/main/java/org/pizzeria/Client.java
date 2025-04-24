@@ -37,6 +37,7 @@ public class Client {
     public boolean orderActive = false;
     public boolean orderDelivered = false;
     public boolean orderCancelled = false;
+    public List<OrderPizza> activeOrderPizzas = new ArrayList<>();
 
     /**
      * Constructs a new {@code Client} instance and initializes the MQTT client.
@@ -152,6 +153,7 @@ public class Client {
         this.orderActive = false;
         this.orderId = null;
         this.orderDelivered = false;
+        this.activeOrderPizzas = new ArrayList<>();
     }
 
     /**
@@ -159,6 +161,7 @@ public class Client {
      */
     public void confirmCancellation() {
         this.orderCancelled = false;
+        this.activeOrderPizzas = new ArrayList<>();
     }
 
     /**
@@ -207,6 +210,7 @@ public class Client {
         String orderPayload = generatePizzaOrderString(pizzas);
         client.publish(ORDER_TOPIC + orderId, new MqttMessage(orderPayload.getBytes()));
         this.orderActive = true;
+        this.activeOrderPizzas = pizzas;
         System.out.println("Placed order: " + orderPayload);
     }
 
